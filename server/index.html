@@ -137,6 +137,10 @@
             };
             xhr.send(JSON.stringify(data));
 
+            // show processing indicator
+            var canvas = document.getElementById("canvas");
+            canvas.innerHTML = "Processing...";
+
             // render the canvas
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
@@ -155,6 +159,8 @@
                             document.getElementById("canvas").innerHTML += "<br>";
                         }
                     }
+                } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                    document.getElementById("canvas").innerHTML = "Error! Please try again or reduce the number of words.";
                 }
             };
 
