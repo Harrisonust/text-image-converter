@@ -85,7 +85,7 @@
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            display: flex;
+            display: none;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
@@ -114,7 +114,7 @@
 
 <body>
     <h1>Text-Image Converter</h1>
-    <label for="word">Enter Texts: </label>
+    <label for="word">Enter Text: </label>
     <input type="text" id="target" name="target">
     <input type="submit" value="Convert" onclick="submitForm()">
     <button id="copy-btn" onclick="copyToClipboard()">Copy Result</button>
@@ -156,6 +156,12 @@
                             }
                             document.getElementById("canvas").innerHTML += "<br>";
                         }
+                    }
+                    // hide canvas if there is no output
+                    if (canvas.innerHTML.trim() === "") {
+                        canvas.style.display = "none";
+                    } else {
+                        canvas.style.display = "flex";
                     }
                 } else if (xhr.readyState === 4 && xhr.status !== 200) {
                     document.getElementById("canvas").innerHTML = "Error! Please try again or reduce the number of words.";
