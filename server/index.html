@@ -10,11 +10,11 @@
             font-size: 16px;
             line-height: 1.5;
             color: #444;
-            margin: 0;
+            margin: 10%;
             padding: 0;
         }
 
-        css Copy code h1 {
+        code h1 {
             text-align: center;
             margin-top: 50px;
             font-size: 3rem;
@@ -94,6 +94,23 @@
             background-color: #333;
             color: #fff;
         }
+
+        #copy-btn {
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        #copy-btn:hover {
+            background-color: #e74c3c;
+        }
     </style>
 </head>
 
@@ -101,7 +118,10 @@
     <h1>Text-Image Converter</h1>
     <label for="word">Enter Texts: </label>
     <input type="text" id="target" name="target">
-    <input type="submit" value="Submit" onclick="submitForm()">
+    <input type="submit" value="Convert" onclick="submitForm()">
+    <button id="copy-btn" onclick="copyToClipboard()">Copy Result</button>
+    <p id="hint"></p>
+
     <p id="canvas"></p> <!-- Add a new paragraph element to display the canvas -->
 
     <script>
@@ -138,6 +158,21 @@
                 }
             };
 
+        }
+
+        function copyToClipboard() {
+            var result = document.getElementById("canvas").innerText;
+            var el = document.createElement('textarea');
+            el.value = result;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            var hint = document.getElementById("hint");
+            hint.innerHTML = "Copied!";
+            setTimeout(function () {
+                hint.innerHTML = "";
+            }, 2000);
         }
     </script>
 </body>
