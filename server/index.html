@@ -14,9 +14,9 @@
             padding: 0;
         }
 
-        code h1 {
+        h1 {
             text-align: center;
-            margin-top: 50px;
+            margin-top: auto;
             font-size: 3rem;
             color: #333;
         }
@@ -28,9 +28,10 @@
 
         label {
             display: block;
-            margin-bottom: 10px;
             font-size: 1.2rem;
             color: #333;
+            text-align: center;
+            margin: 10px;
         }
 
         input[type="text"] {
@@ -43,6 +44,7 @@
             color: #333;
             background-color: #f5f5f5;
             transition: box-shadow 0.3s ease;
+            margin: 10px;
         }
 
         input[type="text"]:focus {
@@ -66,6 +68,7 @@
         }
 
         #copy-btn {
+            width: 150px;
             background-color: #4CAF50;
             color: #fff;
             border: none;
@@ -74,6 +77,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-size: 1.2rem;
+            margin: 10px;
         }
 
         #copy-btn:hover {
@@ -110,24 +114,47 @@
             color: #fff;
         }
 
-        .bottom-right {
-            position: fixed;
-            bottom: 10%;
-            right: 10%;
+        .same-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #menu {
+            margin: 10px;
         }
     </style>
 </head>
 
 <body>
-    <h1>Text-Image Converter</h1>
-    <label for="word">Enter Text: </label>
-    <input type="text" id="target" name="target">
-    <input type="submit" value="Convert" onclick="submitForm()">
-    <button id="copy-btn" onclick="copyToClipboard()">Copy Result</button>
-    <p id="hint"></p>
+    <div class="same-row">
+        <h1>Text-Image Converter</h1>
+        <a href="https://github.com/Harrisonust/text-image-converter">
+            <img src="githubicon.png" alt="Github" style="height: 26px; width: 26px; margin-left: 7px;">
+        </a>
+    </div>
+
+    <div class="same-row">
+        <label for="word">Enter Text: </label>
+        <input type="text" id="target" name="target">
+        <input type="submit" value="Convert" onclick="submitForm()">
+        <button id="copy-btn" onclick="copyToClipboard()">Copy Result</button>
+    </div>
+    <div class="same-row">
+        <label for="menu">Output size:</label>
+        <select id="menu">
+            <option value="15">15x15</option>
+            <option value="16">16x16</option>
+            <option value="17">17x17</option>
+            <option value="18">18x18</option>
+            <option value="19">19x19</option>
+            <option value="20">20x20</option>
+        </select>
+    </div>
+
 
     <p id="canvas"></p> <!-- Add a new paragraph element to display the canvas -->
-    <a href="https://github.com/Harrisonust/text-image-converter" class="bottom-right">Github</a>
 
     <script>
         function submitForm() {
@@ -137,8 +164,10 @@
             var url = 'https://vup8szlkwc.execute-api.ap-east-1.amazonaws.com/default/text-image-converter2';
             xhr.open('POST', url);
             xhr.setRequestHeader('Content-Type', 'application/json');
+
             var data = {
-                "target": target
+                "target": target,
+                "width": parseInt(document.getElementById("menu").value),
             };
 
             if (target.length > 0) {
@@ -191,10 +220,10 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            var hint = document.getElementById("hint");
+            var hint = document.getElementById("copy-btn");
             hint.innerHTML = "Copied!";
             setTimeout(function () {
-                hint.innerHTML = "";
+                hint.innerHTML = "Copy Result";
             }, 2000);
         }
     </script>
