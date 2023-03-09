@@ -112,7 +112,7 @@
     </style>
 </head>
 
-<body>
+<body id="body">
     <div class="same-row">
         <h1>Text-Image Converter</h1>
         <a href="https://github.com/Harrisonust/text-image-converter">
@@ -123,7 +123,7 @@
     <div class="same-row">
         <label for="word">Enter Text: </label>
         <input type="text" id="target" name="target">
-        <button class="btn" onclick="submitForm()">Convert</button>
+        <button id="convert-btn" class="btn" onclick="submitForm()">Convert</button>
         <button id="copy-btn" class="btn" onclick="copyToClipboard()">Copy Result</button>
     </div>
     <div class="same-row">
@@ -140,10 +140,17 @@
         <input id="filler" name="filler" style="width: 15px;">
     </div>
 
-
-    <p id="canvas"></p> <!-- Add a new paragraph element to display the canvas -->
+    <p id="canvas"></p>
 
     <script>
+        var body = document.getElementById("body");
+        var convert_btn = document.getElementById("convert-btn");
+        body.addEventListener("keydown", function (event) {
+            if (event.keyCode === 13) {
+                convert_btn.click();
+            }
+        });
+
         function submitForm() {
             var target = document.getElementById("target").value;
             console.log(target);
@@ -197,7 +204,7 @@
                         canvas.style.display = "flex";
                     }
                 } else if (xhr.readyState === 4 && xhr.status !== 200) {
-                    document.getElementById("canvas").innerHTML = "Error! Please try again or reduce the number of words.";
+                    document.getElementById("canvas").innerHTML = "Error! Please try again.";
                 }
             };
 
