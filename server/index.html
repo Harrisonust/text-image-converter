@@ -34,10 +34,7 @@
             margin: 5px;
         }
 
-        input[type="text"] {
-            width: 300px;
-            padding: 10px;
-            border-radius: 5px;
+        .text-input {
             border: 1px solid #ccc;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
             font-size: 1.2rem;
@@ -47,9 +44,20 @@
             margin: 10px;
         }
 
-        input[type="text"]:focus {
+        .text-input:focus {
             outline: none;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        #target {
+            padding: 10px;
+            width: 300px;
+            border-radius: 5px;
+        }
+
+        #filler {
+            width: 20px;
+            border-radius: 2px;
         }
 
         .btn {
@@ -122,12 +130,12 @@
 
     <div class="same-row">
         <label for="word">Enter Text: </label>
-        <input type="text" id="target" name="target">
+        <input id="target" class="text-input" name="target">
         <button id="convert-btn" class="btn" onclick="submitForm()">Convert</button>
         <button id="copy-btn" class="btn" onclick="copyToClipboard()">Copy Result</button>
     </div>
     <div class="same-row">
-        <label for="menu">Output size:</label>
+        <p for="menu" style="margin-left: 17px; margin-right: 5px;">Output size:</p>
         <select id="menu">
             <option value="15">15x15</option>
             <option value="16">16x16</option>
@@ -136,8 +144,8 @@
             <option value="19">19x19</option>
             <option value="20">20x20</option>
         </select>
-        <p style="margin-left: 17px; margin-right: 5px;">Filler: </p>
-        <input id="filler" name="filler" style="width: 15px;">
+        <p style="margin-left: 30px; margin-right: 5px;">Filler: </p>
+        <input id="filler" name="filler" class="text-input">
     </div>
 
     <p id="canvas"></p>
