@@ -13,10 +13,11 @@ def add_text_to_image(img, text, left, top, text_color=(0, 0, 0), text_size=15):
         img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     draw = ImageDraw.Draw(img)
     
-    s3_client.download_file('text-image-converter', "simsun.ttc", "/tmp/simsun.ttc")
     if text in ascii_letters:
-        font_text = None
+        s3_client.download_file('text-image-converter', "arial.ttf", "/tmp/arial.ttf")
+        font_text = ImageFont.truetype("/tmp/arial.ttf", text_size)
     else:
+        s3_client.download_file('text-image-converter', "simsun.ttc", "/tmp/simsun.ttc")
         font_text = ImageFont.truetype("/tmp/simsun.ttc", text_size, encoding="utf-8")
 
     draw.text((left, top), text, text_color, font=font_text)
@@ -28,7 +29,7 @@ def convert_word_to_matrix(target_word, width):
     img.fill(255)
     img = add_text_to_image(img, target_word, 0, 0, text_size=width)
     img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    ret, img = cv2.threshold(img, 210, 255, cv2.THRESH_BINARY)
+    ret, img = cv2.threshold(img, 240, 255, cv2.THRESH_BINARY)
     img = cv2.resize(img, (width, width))
     return img
 
