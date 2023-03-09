@@ -109,6 +109,12 @@
             background-color: #333;
             color: #fff;
         }
+
+        .bottom-right {
+            position: fixed;
+            bottom: 10%;
+            right: 10%;
+        }
     </style>
 </head>
 
@@ -121,6 +127,7 @@
     <p id="hint"></p>
 
     <p id="canvas"></p> <!-- Add a new paragraph element to display the canvas -->
+    <a href="https://github.com/Harrisonust/text-image-converter" class="bottom-right">Github</a>
 
     <script>
         function submitForm() {
@@ -133,11 +140,17 @@
             var data = {
                 "target": target
             };
-            xhr.send(JSON.stringify(data));
 
-            // show processing indicator
-            var canvas = document.getElementById("canvas");
-            canvas.innerHTML = "Processing...";
+            if (target.length > 0) {
+                xhr.send(JSON.stringify(data));
+                var canvas = document.getElementById("canvas");
+                canvas.innerHTML = "Processing...";
+                canvas.style.display = "flex";
+            } else {
+                var canvas = document.getElementById("canvas");
+                canvas.innerHTML = "Please enter text!";
+                canvas.style.display = "flex";
+            }
 
             // render the canvas
             xhr.onreadystatechange = function () {

@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 import boto3
 
 s3_client = boto3.client("s3")
-
+ascii_letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 def add_text_to_image(img, text, left, top, text_color=(0, 0, 0), text_size=15):
     if isinstance(img, np.ndarray):  
@@ -14,7 +14,11 @@ def add_text_to_image(img, text, left, top, text_color=(0, 0, 0), text_size=15):
     draw = ImageDraw.Draw(img)
     
     s3_client.download_file('text-image-converter', "simsun.ttc", "/tmp/simsun.ttc")
-    font_text = ImageFont.truetype("/tmp/simsun.ttc", text_size, encoding="utf-8")
+    if text in ascii_letters:
+        font_text = None
+    else:
+        font_text = ImageFont.truetype("/tmp/simsun.ttc", text_size, encoding="utf-8")
+
     draw.text((left, top), text, text_color, font=font_text)
     return cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
 
