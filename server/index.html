@@ -136,6 +136,8 @@
             <option value="19">19x19</option>
             <option value="20">20x20</option>
         </select>
+        <p style="margin-left: 17px; margin-right: 5px;">Filler: </p>
+        <input id="filler" name="filler" style="width: 15px;">
     </div>
 
 
@@ -176,7 +178,11 @@
                         for (var j = 0; j < response[i].length; j++) {
                             for (var k = 0; k < response[i][j].length; k++) {
                                 if (response[i][j][k] == 1) {
-                                    document.getElementById("canvas").innerHTML += target[i];
+                                    if (document.getElementById("filler").value == "") {
+                                        document.getElementById("canvas").innerHTML += target[i];
+                                    } else {
+                                        document.getElementById("canvas").innerHTML += document.getElementById("filler").value;
+                                    }
                                 } else {
                                     document.getElementById("canvas").innerHTML += "&#12288";
                                 }
