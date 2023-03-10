@@ -58,8 +58,9 @@
             border-radius: 5px;
         }
 
-        #filler {
-            width: 20px;
+        #filler-input {
+            width: 15px;
+            height: 15px;
             border-radius: 2px;
         }
 
@@ -117,8 +118,29 @@
             justify-content: center;
         }
 
-        #menu {
-            margin: 5;
+        .option-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        #flip-cb {
+            width: 15px;
+            height: 15px;
+        }
+
+        .option {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-left: 30px;
+        }
+
+        .option-title {
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -137,18 +159,26 @@
         <button id="convert-btn" class="btn" onclick="submitForm()">Convert</button>
         <button id="copy-btn" class="btn" onclick="copyToClipboard()">Copy Result</button>
     </div>
-    <div class="same-row">
-        <p for="menu" style="margin-left: 17px; margin-right: 5px;">Output size:</p>
-        <select id="menu">
-            <option value="15">15x15</option>
-            <option value="16">16x16</option>
-            <option value="17">17x17</option>
-            <option value="18">18x18</option>
-            <option value="19">19x19</option>
-            <option value="20">20x20</option>
-        </select>
-        <p style="margin-left: 30px; margin-right: 5px;">Filler: </p>
-        <input id="filler" name="filler" class="text-input">
+    <div class="option-row">
+        <div class="option">
+            <p class="option-title">Output size:</p>
+            <select id="menu">
+                <option value="15">15x15</option>
+                <option value="16">16x16</option>
+                <option value="17">17x17</option>
+                <option value="18">18x18</option>
+                <option value="19">19x19</option>
+                <option value="20">20x20</option>
+            </select>
+        </div>
+        <div class="option">
+            <p class="option-title">Filler:</p>
+            <input id="filler-input" class="text-input">
+        </div>
+        <div class="option">
+            <p class="option-title">Flip Direction:</p>
+            <input type="checkbox" id="flip-cb">
+        </div>
     </div>
 
     <p id="canvas"></p>
@@ -173,6 +203,7 @@
             var data = {
                 "target": target,
                 "width": parseInt(document.getElementById("menu").value),
+                "horizontal": document.getElementById("flip-cb").checked,
             };
 
             if (target.length > 0) {
@@ -191,23 +222,38 @@
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
                     console.log(response);
-                    document.getElementById("canvas").innerHTML = "";
-                    for (var i = 0; i < response.length; i++) {
-                        for (var j = 0; j < response[i].length; j++) {
-                            for (var k = 0; k < response[i][j].length; k++) {
-                                if (response[i][j][k] == 1) {
-                                    if (document.getElementById("filler").value == "") {
-                                        document.getElementById("canvas").innerHTML += target[i];
-                                    } else {
-                                        document.getElementById("canvas").innerHTML += document.getElementById("filler").value;
-                                    }
+                    const canvas = document.getElementById("canvas");
+                    const flipCb = document.getElementById("flip-cb");
+                    const fillerInput = document.getElementById("filler-input");
+                    canvas.innerHTML = "";
+
+                    response.forEach((row, i) => {
+                        row.forEach((cell, j) => {
+                            if (flipCb.checked) {
+                                if (cell == 1) {
+                                    const targetIndex = Math.floor(j / row.length);
+                                    const filler = fillerInput.value || target[targetIndex];
+                                    canvas.innerHTML += filler;
                                 } else {
-                                    document.getElementById("canvas").innerHTML += "&#12288";
+                                    canvas.innerHTML += "&#12288";
                                 }
+                            } else {
+                                cell.forEach((subCell, k) => {
+                                    if (subCell == 1) {
+                                        const filler = fillerInput.value || target[i];
+                                        canvas.innerHTML += filler;
+                                    } else {
+                                        canvas.innerHTML += "&#12288";
+                                    }
+                                });
+                                canvas.innerHTML += "<br>";
                             }
-                            document.getElementById("canvas").innerHTML += "<br>";
+                        });
+                        if (flipCb.checked) {
+                            canvas.innerHTML += "<br>";
                         }
-                    }
+                    });
+
                     // hide canvas if there is no output
                     if (canvas.innerHTML.trim() === "") {
                         canvas.style.display = "none";

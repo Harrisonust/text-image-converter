@@ -40,11 +40,13 @@ def lambda_handler(event, context):
     body = event['body'] # assuming the JSON data is in the "body" field of the event
     width = 15
     target_words = "空"
+    horizontal = False
     if body is not None:
         data = json.loads(body)
         target_words = data.get('target', "空")
         width = data.get('width', 15)
-    
+        horizontal = data.get('horizontal', False)
+
     result = np.empty((len(target_words), width, width), int)
 
     for index, target_word in enumerate(target_words):
@@ -59,6 +61,13 @@ def lambda_handler(event, context):
                     print(target_word, end='') 
                     result[index][i][j] = 1
             print()
+    
+    if horizontal:
+        result_horizontal = np.empty((width, 0), int)
+        for word in result:
+            result_horizontal = np.hstack((result_horizontal, word))
+        result = result_horizontal
+        
     result = result.tolist()
 
     return {
