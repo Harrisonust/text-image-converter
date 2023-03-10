@@ -44,3 +44,15 @@ while True:
                     print(target_word, end='') 
                     result[index][i][j] = 1
             print()
+
+    result_horizontal = np.empty((width, 0), int)
+    for word in result:
+        result_horizontal = np.hstack((result_horizontal, word))
+    
+    for i in range(width):
+        for j in range(width * len(target_words)):
+            if result_horizontal[i][j] == 0:
+                print(chr(12288), end='')
+            else:
+                print(target_words[j // width], end='')
+        print()
